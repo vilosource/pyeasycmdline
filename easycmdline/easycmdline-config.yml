@@ -1,0 +1,38 @@
+logging:
+  default_level: "WARNING"
+  format: "%(asctime)s - %(name)s - %(levelname)s - [%(command_path)s] %(message)s"
+
+commands:
+  greet:
+    description: "Greet a user by name."
+    command_class: "easycmdline.commands.greetercmd.GreeterCommand"
+    handler_class: "easycmdline.handlers.greeterhandler.GreeterHandler"
+    logging_level: "DEBUG"
+    arguments:
+      - name: "--name"
+        default: "World"
+        help: "Name to greet."
+
+  simple:
+    description: "Display a simple message."
+    command_class: "easycmdline.commands.simplecmd.SimpleCommand"
+    arguments:
+      - name: "--message"
+        default: "Hello"
+        help: "Message to display."
+
+  remote:
+    description: "Manage remote repositories."
+    logging_level: "INFO"
+    subcommands:
+      origin:
+        description: "Manage origin remotes."
+        subcommands:
+          add:
+            description: "Add an origin remote."
+            command_class: "easycmdline.commands.remotecommand.originaddcmd.OriginAddCommand"
+            handler_class: "easycmdline.handlers.remotehandler.originaddhandler.OriginAddHandler"
+            arguments:
+              - name: "--url"
+                required: true
+                help: "Remote URL."
