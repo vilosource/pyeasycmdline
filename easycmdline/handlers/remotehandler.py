@@ -1,5 +1,5 @@
 from easycmdline.core.base import BaseHandler
-import logging 
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +10,6 @@ class OriginAddHandler(BaseHandler):
         super().__init__(args)
         logger.debug("Initializing OriginAddHandler with args: %s", args)
         self.url = args.url
-        
 
     def run(self):
 

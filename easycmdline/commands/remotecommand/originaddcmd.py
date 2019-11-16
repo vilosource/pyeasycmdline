@@ -14,4 +14,3 @@ class OriginAddCommand(BaseCommand):
             self.handler.run()
         else:
             raise ValueError("No handler provided.")
-

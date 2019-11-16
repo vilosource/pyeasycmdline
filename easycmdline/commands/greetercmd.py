@@ -10,7 +10,7 @@ class GreeterCommand(BaseCommand):
         print(f"Hello {self.name}!")
         if self.handler:
             # Call the handler's run method if provided
-            # We don't pass args to the handler here, because 
+            # We don't pass args to the handler here, because
             # the handler should already have the necessary data
             # hwhen it was passed to this class during initialization
             # This is a design choice; you could also pass args if needed
