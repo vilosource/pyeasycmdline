@@ -1,0 +1,76 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  tests-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: make dev-install
+      - run: make lint
+      - run: make test
+      - run: make coverage
+
+  create-rc-tag:
+    if: github.ref == 'refs/heads/develop'
+    needs: tests-and-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: develop
+
+      - name: Create RC Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          LAST_TAG=$(git tag -l 'v*-rc.*' --sort=-v:refname | head -n1)
+          if [[ -z "$LAST_TAG" ]]; then
+              NEW_TAG="v0.1.0-rc.1"
+          else
+              BASE_VERSION=$(echo $LAST_TAG | sed 's/-rc.*//')
+              RC_NUMBER=$(echo $LAST_TAG | grep -oE '[0-9]+$')
+              NEW_RC_NUMBER=$((RC_NUMBER+1))
+              NEW_TAG="$BASE_VERSION-rc.$NEW_RC_NUMBER"
+          fi
+
+          git tag -a $NEW_TAG -m "Auto RC tag $NEW_TAG"
+          git push origin $NEW_TAG
+
+  release-on-main:
+    if: github.ref == 'refs/heads/main'
+    needs: tests-and-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Create Production Release Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          LAST_RC=$(git tag -l 'v*-rc.*' --sort=-v:refname | head -n1)
+          RELEASE_VERSION=$(echo $LAST_RC | sed 's/-rc.*//')
+
+          git tag -a $RELEASE_VERSION -m "Production Release $RELEASE_VERSION"
+          git push origin $RELEASE_VERSION
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: $RELEASE_VERSION
+          generate_release_notes: true
