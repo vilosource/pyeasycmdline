@@ -1,3 +1,12 @@
+"""
+Command-Line Interface (CLI) module for the easycmdline package.
+
+This module provides the core functionality for parsing command-line arguments,
+loading configuration from YAML files, and executing commands based on the
+configuration. It serves as the main entry point for applications using
+the easycmdline framework.
+"""
+
 import argparse
 import logging
 import os
@@ -42,7 +51,7 @@ class EasyCmdLine:
         self.config = load_config(self.config_file)
         setup_logging(self.config)
         self.logger = logging.getLogger(__name__)
-        self.logger.info(f"Loaded configuration from {self.config_file}")
+        self.logger.info("Loaded configuration from %s", self.config_file)
 
     def create_subparsers(self, parser, commands, parents=None):
         """Create subparsers for commands with tracking of parent commands"""
@@ -50,7 +59,9 @@ class EasyCmdLine:
             parents = []
 
         self.logger.debug(
-            f"Creating subparsers for commands: {list(commands.keys())} with parents: {parents}"
+            "Creating subparsers for commands: %s with parents: %s",
+            list(commands.keys()),
+            parents,
         )
         subparsers = parser.add_subparsers(
             dest="command" if not parents else f"command_{len(parents)}"
@@ -89,7 +100,7 @@ class EasyCmdLine:
         """
         if isinstance(args, argparse.Namespace) and hasattr(args, "_command_path"):
             cmd_path = args._command_path
-            self.logger.debug(f"Found command path: {cmd_path}")
+            self.logger.debug("Found command path: %s", cmd_path)
             return cmd_path
         return []
 
@@ -115,7 +126,7 @@ class EasyCmdLine:
         """
         # Get a logger specific to this command path
         cmd_logger = get_command_logger(cmd_path, self.config)
-        cmd_logger.debug(f"Processing command: {' '.join(cmd_path)}")
+        cmd_logger.debug("Processing command: %s", " ".join(cmd_path))
 
         # Navigate through command hierarchy
         current_commands = commands
@@ -195,7 +206,7 @@ class EasyCmdLine:
         if isinstance(args, argparse.Namespace):
             self.logger.debug(f"Resolving command with args: {vars(args)}")
         else:
-            self.logger.debug(f"Resolving command with non-Namespace args")
+            self.logger.debug("Resolving command with non-Namespace args")
 
         # Try to resolve using command path first
         cmd_path = self._extract_command_path(args)
@@ -300,7 +311,7 @@ class EasyCmdLine:
         if isinstance(args, argparse.Namespace):
             if hasattr(args, "_command_path"):
                 return " ".join(args._command_path)
-            elif hasattr(args, "command"):
+            if hasattr(args, "command"):
                 return args.command
         return "unknown"
 
@@ -375,17 +386,17 @@ class EasyCmdLine:
         if not self._has_command(args):
             self.logger.info("No command specified. Showing help message.")
             parser.print_help()
-            return
+            return None
 
         try:
             # Resolve and execute the command
             cmd_cfg = self.resolve_command(args, commands)
-            self.logger.debug(f"Resolved command configuration: {cmd_cfg}")
+            self.logger.debug("Resolved command configuration: %s", cmd_cfg)
 
             return self._create_and_run_command(cmd_cfg, args, cmd_logger)
 
         except Exception as e:
-            cmd_logger.error(f"Error executing command: {str(e)}")
+            cmd_logger.error("Error executing command: %s", str(e))
             cmd_logger.debug("Exception details:", exc_info=True)
             raise
 

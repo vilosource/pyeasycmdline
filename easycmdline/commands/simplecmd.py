@@ -14,7 +14,7 @@ class SimpleCommand(BaseCommand):
 
         """ Technicaly we don't really need to call the super constructor here,
         but it's a good practice to do so, because the BaseCommand class might
-        have some initialization logic that we want to inherit. 
+        have some initialization logic that we want to inherit.
 
         This is a basic command class that doesn't do much, but it serves as a
         template for more complex commands.

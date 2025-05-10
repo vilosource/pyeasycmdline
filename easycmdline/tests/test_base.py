@@ -1,3 +1,10 @@
+"""
+Tests for the base classes in the core.base module.
+
+These tests verify that the abstract base classes and their concrete
+implementations work as expected for command and handler patterns.
+"""
+
 import pytest
 from easycmdline.core.base import BaseCommand, BaseHandler
 
@@ -17,6 +24,13 @@ class ConcreteHandler(BaseHandler):
 
 
 class TestBaseCommand:
+    """
+    Test cases for the BaseCommand abstract class.
+
+    These tests verify the initialization and abstract method
+    behavior of the BaseCommand class.
+    """
+
     def test_init(self):
         """Test BaseCommand initialization"""
         args = type("TestArgs", (), {"test_arg": "test_value"})()
@@ -36,6 +50,13 @@ class TestBaseCommand:
 
 
 class TestBaseHandler:
+    """
+    Test cases for the BaseHandler abstract class.
+
+    These tests verify the initialization and abstract method
+    behavior of the BaseHandler class.
+    """
+
     def test_init(self):
         """Test BaseHandler initialization"""
         args = type("TestArgs", (), {"test_arg": "test_value"})()

@@ -1,3 +1,12 @@
+"""
+Logging configuration and utilities for the easycmdline package.
+
+This module provides functions and classes for setting up and customizing
+logging for applications that use easycmdline. It includes support for
+configuring loggers from YAML files and adding command-specific context
+to log messages.
+"""
+
 import logging
 import os
 from typing import Dict, Any, Optional
@@ -17,13 +26,34 @@ LOG_LEVELS = {
 
 
 class CommandContextFilter(logging.Filter):
-    """Adds command context to log records"""
+    """
+    Adds command context to log records.
+
+    This filter enriches log records with information about which command
+    is being executed, allowing for better traceability in logs. It adds
+    a 'command_path' attribute to log records.
+    """
 
     def __init__(self, command_path=None):
+        """
+        Initialize the filter with an optional command path.
+
+        Args:
+            command_path: The path of the command being executed
+        """
         super().__init__()
         self.command_path = command_path or []
 
     def filter(self, record):
+        """
+        Add command path context to the log record.
+
+        Args:
+            record: The log record to be modified
+
+        Returns:
+            True to indicate the record should be processed
+        """
         if not hasattr(record, "command_path"):
             record.command_path = (
                 ".".join(self.command_path) if self.command_path else "main"
