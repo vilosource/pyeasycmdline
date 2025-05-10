@@ -1,3 +1,10 @@
+"""
+Tests for the config module functionality.
+
+These tests verify that the configuration loading and parsing works correctly
+with different types of YAML configurations.
+"""
+
 import pytest
 from easycmdline.core.config import load_config
 

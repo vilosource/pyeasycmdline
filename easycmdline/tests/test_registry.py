@@ -1,5 +1,9 @@
-import pytest
+"""
+Tests for the registry module functionality.
+"""
+
 from collections import Counter
+import pytest
 from easycmdline.core.registry import import_class
 
 
@@ -16,10 +20,12 @@ def test_import_class_local(monkeypatch):
 
     # Create a mock module for testing
     class MockClass:
-        pass
+        """Test class for mocking import in registry tests."""
 
     # Create a mock module
     class MockModule:
+        """Mock module container for test classes."""
+
         TestClass = MockClass
 
     # Add the mock module to sys.modules

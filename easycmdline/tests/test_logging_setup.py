@@ -1,10 +1,16 @@
+"""
+Tests for the logging setup functionality.
+
+These tests verify that logging is configured correctly based on
+different configuration options and command contexts.
+"""
+
 import logging
 import pytest
 from easycmdline.core.logging_setup import (
     setup_logging,
     get_command_logger,
     CommandContextFilter,
-    LOG_LEVELS,
 )
 
 

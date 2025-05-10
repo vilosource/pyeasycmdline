@@ -3,16 +3,11 @@
 """
 Unit tests for the EasyCmdLine class functionality
 """
-import os
-import sys
 import argparse
-import logging
+from unittest.mock import MagicMock, patch
 import pytest
-from unittest.mock import MagicMock, patch, call
-from typing import Dict, Any, List
 
 from easycmdline.cli import EasyCmdLine
-from easycmdline.core.config import load_config
 
 
 @pytest.fixture
@@ -699,7 +694,7 @@ class TestRunFunction:
 
         with patch("easycmdline.cli.EasyCmdLine", return_value=mock_cli), patch.dict(
             "os.environ", {"EASYCMDLINE_DEBUG": "1"}, clear=True
-        ), patch("easycmdline.cli.sys.exit") as mock_exit, patch(
+        ), patch("easycmdline.cli.sys.exit"), patch(
             "easycmdline.cli.logging.debug"
         ) as mock_debug, patch(
             "easycmdline.cli.logging.getLogger"

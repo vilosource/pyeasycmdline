@@ -1,4 +1,7 @@
-import pytest
+"""
+Tests for the custom error classes in the errors module.
+"""
+
 from easycmdline.core.errors import CommandError, ConfigError, HandlerError
 
 

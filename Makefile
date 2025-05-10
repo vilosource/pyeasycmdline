@@ -1,31 +1,29 @@
 .PHONY: clean test install dev-install lint coverage docs
 
-# Default Python command
-PYTHON := python
-PIP := pip
+# Use Poetry for commands
+POETRY := poetry
 
 # Test command with verbose output
 test:
-	pytest -xvs ./easycmdline/tests
+	$(POETRY) run pytest -xvs ./easycmdline/tests
 
 # Run tests with coverage
 coverage:
-	pytest --cov=easycmdline ./easycmdline/tests --cov-report=term --cov-report=html
+	$(POETRY) run pytest --cov=easycmdline ./easycmdline/tests --cov-report=term --cov-report=html
 	@echo "HTML coverage report generated in htmlcov/"
 
 # Install package
 install:
-	$(PIP) install -e .
+	$(POETRY) install
 
 # Install development dependencies
 dev-install:
-	$(PIP) install -e ".[dev]"
-	$(PIP) install pytest pytest-mock pytest-cov
+	$(POETRY) install --with dev
 
 # Lint code
 lint:
-	flake8 easycmdline
-	pylint easycmdline
+	$(POETRY) run flake8 --max-line-length=120 easycmdline
+	$(POETRY) run pylint --max-line-length=120 easycmdline
 
 # Clean Python and build artifacts
 clean:
@@ -48,7 +46,11 @@ docs:
 
 # Run an example (modify path as needed)
 example:
-	$(PYTHON) examples/myapp/mycli.py
+	$(POETRY) run python examples/myapp/mycli.py
+
+# Type checking with mypy
+typecheck:
+	$(POETRY) run mypy easycmdline
 
 # Show help
 help:
@@ -58,6 +60,7 @@ help:
 	@echo "  install      Install package"
 	@echo "  dev-install  Install development dependencies"
 	@echo "  lint         Lint code"
+	@echo "  typecheck    Run mypy type checking"
 	@echo "  clean        Clean build artifacts"
-	@echo "  docs         Generate documentation"
+	@echo "  docs         Generate documentation" 
 	@echo "  example      Run an example script"
