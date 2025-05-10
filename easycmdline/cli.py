@@ -204,7 +204,7 @@ class EasyCmdLine:
             ValueError: If no valid command can be resolved from the arguments
         """
         if isinstance(args, argparse.Namespace):
-            self.logger.debug(f"Resolving command with args: {vars(args)}")
+            self.logger.debug("Resolving command with args: %s", vars(args))
         else:
             self.logger.debug("Resolving command with non-Namespace args")
 
@@ -234,7 +234,7 @@ class EasyCmdLine:
         commands = {
             k: v for k, v in self.config.get("commands", {}).items() if k != "command"
         }
-        self.logger.debug(f"Filtered commands: {list(commands.keys())}")
+        self.logger.debug("Filtered commands: %s", list(commands.keys()))
         return commands
 
     def _parse_arguments(
@@ -262,7 +262,7 @@ class EasyCmdLine:
             # Called programmatically with specific args
             args = parser.parse_args(args)
 
-        self.logger.debug(f"Parsed arguments: {vars(args)}")
+        self.logger.debug("Parsed arguments: %s", vars(args))
         return args
 
     def _normalize_args(self, args: argparse.Namespace) -> argparse.Namespace:
@@ -316,14 +316,14 @@ class EasyCmdLine:
         return "unknown"
 
     def _create_and_run_command(
-        self, cmd_cfg: Dict[str, Any], args: Any, cmd_logger: logging.Logger
+        self, cmd_cfg: Dict[str, Any], args: argparse.Namespace, cmd_logger: logging.Logger
     ) -> Any:
         """
-        Create a command instance and run it.
+        Create a command instance and run it with type-hinted arguments.
 
         Args:
             cmd_cfg: Command configuration
-            args: Parsed arguments
+            args: Parsed command-line arguments (argparse.Namespace)
             cmd_logger: Logger for the command
 
         Returns:
@@ -354,7 +354,7 @@ class EasyCmdLine:
         # Create and execute the command
         command = cmd_cls(args, handler)
         cmd_text = self._get_command_text(args)
-        cmd_logger.info(f"Executing command: {cmd_text}")
+        cmd_logger.info("Executing command: %s", cmd_text)
 
         result = command.run()
         cmd_logger.debug("Command execution completed successfully")
@@ -426,7 +426,7 @@ def run(config_file=None):
         cli = EasyCmdLine(config_file)
         return cli.execute()
     except Exception as e:
-        logging.error(f"Unhandled error: {str(e)}")
+        logging.error("Unhandled error: %s", str(e))
         if os.environ.get("EASYCMDLINE_DEBUG"):
             logging.debug("Exception details:", exc_info=True)
         sys.exit(1)
