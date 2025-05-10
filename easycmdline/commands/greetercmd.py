@@ -1,12 +1,16 @@
-from easycmdline.core.base import BaseCommand
+from typing import Optional
+import argparse
+from easycmdline.core.base import BaseCommand, BaseHandler
 
 
 class GreeterCommand(BaseCommand):
-    def __init__(self, args, handler=None):
+    def __init__(
+        self, args: argparse.Namespace, handler: Optional["BaseHandler"] = None
+    ):
         super().__init__(args, handler)
-        self.name = args.name
+        self.name: str = args.name
 
-    def run(self):
+    def run(self) -> None:
         print(f"Hello {self.name}!")
         if self.handler:
             # Call the handler's run method if provided

@@ -24,9 +24,10 @@ class CommandContextFilter(logging.Filter):
         self.command_path = command_path or []
 
     def filter(self, record):
-        record.command_path = (
-            ".".join(self.command_path) if self.command_path else "main"
-        )
+        if not hasattr(record, "command_path"):
+            record.command_path = (
+                ".".join(self.command_path) if self.command_path else "main"
+            )
         return True
 
 
@@ -48,7 +49,11 @@ def setup_logging(config: Dict[str, Any]) -> None:
     default_level = LOG_LEVELS.get(default_level_name.upper(), logging.WARNING)
 
     # Get format from config or use default
+    # Replace %(command_path)s with main if it exists in the format to avoid KeyError
     log_format = log_config.get("format", DEFAULT_LOG_FORMAT)
+    if "%(command_path)s" in log_format:
+        # Fix the format to use a default value for command_path
+        log_format = log_format.replace("%(command_path)s", "main")
 
     # Configure root logger
     root_logger = logging.getLogger()
@@ -58,32 +63,47 @@ def setup_logging(config: Dict[str, Any]) -> None:
     for handler in root_logger.handlers[:]:
         root_logger.removeHandler(handler)
 
-    # Create console handler
+    # Create console handler with proper formatter
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(logging.Formatter(log_format))
     root_logger.addHandler(console_handler)
 
+    # Make sure all root logger handlers have a CommandContextFilter
+    command_filter = CommandContextFilter([])
+    if not any(isinstance(f, CommandContextFilter) for f in root_logger.filters):
+        root_logger.addFilter(command_filter)
 
-def get_command_logger(command_path: list, config: Dict[str, Any]) -> logging.Logger:
+
+def _build_logger_name(command_path: list) -> str:
     """
-    Get a logger for a specific command with the appropriate level
+    Build a logger name based on the command path.
+
+    Args:
+        command_path: List representing the path to the command
+
+    Returns:
+        Formatted logger name
+    """
+    return (
+        f"easycmdline.command.{'.'.join(command_path)}"
+        if command_path
+        else "easycmdline"
+    )
+
+
+def _find_command_log_level(
+    command_path: list, config: Dict[str, Any]
+) -> Optional[int]:
+    """
+    Find the appropriate log level for a command by traversing its hierarchy.
 
     Args:
         command_path: List representing the path to the command
         config: Full application configuration
 
     Returns:
-        Logger configured for the command
+        Log level if found, otherwise None
     """
-    # Create logger name based on command path
-    logger_name = (
-        f"easycmdline.command.{'.'.join(command_path)}"
-        if command_path
-        else "easycmdline"
-    )
-    logger = logging.getLogger(logger_name)
-
-    # Determine log level for this command by traversing the command hierarchy
     level = None
     current_config = config.get("commands", {})
     current_path = []
@@ -103,12 +123,53 @@ def get_command_logger(command_path: list, config: Dict[str, Any]) -> logging.Lo
         else:
             break
 
-    # If a level was found in the command hierarchy, set it
+    return level
+
+
+def _ensure_command_context_filter(logger: logging.Logger, command_path: list) -> None:
+    """
+    Ensure the logger has a CommandContextFilter applied to add command path context to log records.
+
+    A CommandContextFilter is a logging filter that enriches log records with command path
+    information. This makes it possible to identify which command generated a particular log
+    message, which is especially useful in applications with nested command hierarchies.
+
+    This function checks if the logger already has a CommandContextFilter attached.
+    If not, it creates a new filter with the provided command path and adds it to
+    the logger. The filter adds a 'command_path' attribute to all log records processed
+    by this logger, which is used in log formatting patterns like '%(command_path)s'.
+
+    Args:
+        logger: Logger to configure with the context filter
+        command_path: List representing the path to the command, used to create the filter
+    """
+    has_filter = any(isinstance(f, CommandContextFilter) for f in logger.filters)
+    if not has_filter:
+        context_filter = CommandContextFilter(command_path)
+        logger.addFilter(context_filter)
+
+
+def get_command_logger(command_path: list, config: Dict[str, Any]) -> logging.Logger:
+    """
+    Get a logger for a specific command with the appropriate level
+
+    Args:
+        command_path: List representing the path to the command
+        config: Full application configuration
+
+    Returns:
+        Logger configured for the command
+    """
+    # Get a logger with the appropriate name
+    logger_name = _build_logger_name(command_path)
+    logger = logging.getLogger(logger_name)
+
+    # Set the appropriate log level if found in the command hierarchy
+    level = _find_command_log_level(command_path, config)
     if level is not None:
         logger.setLevel(level)
 
-    # Add context filter to add command path info to log records
-    context_filter = CommandContextFilter(command_path)
-    logger.addFilter(context_filter)
+    # Ensure the logger has a command context filter
+    _ensure_command_context_filter(logger, command_path)
 
     return logger

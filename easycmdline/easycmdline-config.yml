@@ -31,7 +31,7 @@ commands:
           add:
             description: "Add an origin remote."
             command_class: "easycmdline.commands.remotecommand.originaddcmd.OriginAddCommand"
-            handler_class: "easycmdline.handlers.remotehandler.originaddhandler.OriginAddHandler"
+            handler_class: "easycmdline.handlers.remotehandler.OriginAddHandler"
             arguments:
               - name: "--url"
                 required: true
