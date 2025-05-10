@@ -26,3 +26,19 @@ easycmdline = "easycmdline.cli:run"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint]
+ignore = ["tests", "easycmdline/tests"]
+ignore-patterns = ["test_.*\\.py"]
+max-line-length = 120
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring", 
+    "missing-function-docstring",
+    "too-few-public-methods",
+    "protected-access",
+    "redefined-outer-name",
+    "import-outside-toplevel",
+    "unused-argument",
+    "broad-exception-caught"
+]
