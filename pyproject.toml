@@ -46,8 +46,7 @@ disable = [
 
 [tool.semantic_release]
 version_variable = "easycmdline/__init__.py:__version__"
-upload_to_pypi = true
-commit_version_number = true
-commit_message = "chore(release): bump version to {version}"
-tag_format = "v{version}"
-major_on_zero = false
+branches = [
+  "main",
+  { name = "release/**", prerelease = "rc" }
+]
