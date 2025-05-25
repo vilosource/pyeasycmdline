@@ -228,6 +228,19 @@ commands:
     # ...
 ```
 
+## Development and Contribution
+
+### Git Workflow and CI/CD
+
+This project uses GitHub Actions with semantic-release for automated versioning and releases. For detailed information about our Git workflow, release process, and CI/CD pipeline, please refer to [GitHubActions.md](./GitHubActions.md).
+
+Key features of our workflow:
+- Automated semantic versioning based on commit messages
+- Release candidate (RC) creation on release branches
+- Production releases when merging to main
+- Hotfix process for addressing bugs in production
+- Proper branch management and protection
+
 ## License
 
 MIT License
