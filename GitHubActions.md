@@ -9,8 +9,8 @@ This document details the recommended Git workflow and CI/CD pipeline using GitH
 | Branch Type   | Purpose                              | Automation Behavior                              |
 | -------------| ------------------------------------- | ------------------------------------------------ |
 | `main`       | Production-ready, stable code         | Auto-tags and creates a release on merge         |
-| `develop`    | Integration and testing branch        | No RC tags, prepares for release                 |
 | `release/*`  | Release preparation & RC tagging      | Creates Release Candidate (RC) tags              |
+| `develop`    | Integration and testing branch        | No RC tags, prepares for release                 |
 | `feature/*`  | New feature development               | Auto-merge into `develop` after successful tests |
 | `hotfix/*`   | Critical fixes                        | Auto-merge into `develop` after successful tests |
 
@@ -30,30 +30,30 @@ This document details the recommended Git workflow and CI/CD pipeline using GitH
   ```bash
   git push -u origin feature/my-new-feature
   ```
-* GitHub Actions automatically runs tests and merges to `develop` upon success.
+* GitHub Actions automatically runs tests and merges to `develop` upon success all time time!
 
 ### 2. Creating Release Candidates
 
-* When ready for a release, create a `release/x.y` branch from `develop`:
+* When ready for a release, create a `release/x.y.z` branch from `develop` (note the full semantic version):
 
   ```bash
   git checkout develop
   git pull
-  git checkout -b release/1.2
-  git push -u origin release/1.2
+  git checkout -b release/1.2.0
+  git push -u origin release/1.2.0
   ```
-* Pushing to `release/*` triggers automated tests.
-* After successful tests, GitHub Actions automatically creates RC tags:
+* Pushing to `release/x.y.z` triggers automated tests and semantic-release.
+* After successful tests, semantic-release automatically creates RC tags:
 
   ```
-  v1.2-rc.1, v1.2-rc.2, ...
+  v1.2.0-rc.1, v1.2.0-rc.2, ...
   ```
 * Deploy and test using the RC tag.
 
 ### 3. Production Release
 
-* After successful RC testing, manually create a Pull Request (PR) from the `release/x.y` branch to `main`.
-* Merging PR into `main` automatically triggers a new production release (`v1.2`).
+* After successful RC testing, manually create a Pull Request (PR) from the `release/x.y.z` branch to `main`.
+* Merging PR into `main` automatically triggers a new production release (`v1.2.0`).
 
 ## ⚙️ GitHub Actions Workflows
 
