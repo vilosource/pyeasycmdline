@@ -2,6 +2,19 @@
 
 
 
+## v0.2.1-rc.2 (2025-05-25)
+
+### Fix
+
+* fix: update PyPI publishing configuration to match repository token name ([`65341d1`](https://github.com/vilosource/pyeasycmdline/commit/65341d17ab130db48ae9372ec989a350aea493af))
+
+* fix: Added link and comment to the GitHubActions.md ([`36a73fc`](https://github.com/vilosource/pyeasycmdline/commit/36a73fc62adf50b8d895e6fd6c10a2bd4be2575d))
+
+### Unknown
+
+* updated for better clarity on the workflows ([`0a865ee`](https://github.com/vilosource/pyeasycmdline/commit/0a865ee371c74910bf5a625fc5db67e20847f07c))
+
+
 ## v0.2.1-rc.1 (2025-05-25)
 
 ### Fix
