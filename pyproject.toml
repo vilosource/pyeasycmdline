@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyeasycmdline"
-version = "0.2.1-rc.3"
+version = "1.0.0-rc.1"
 description = "A YAML-driven command-line interface framework"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
@@ -12,7 +12,7 @@ pyyaml = "^6.0"
 black = "^25.1.0"
 flake8 = "^7.2.0"
 pylint = "^3.3.7"
-python-semantic-release = "^8.0.0"
+python-semantic-release = "^10.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0"
@@ -20,7 +20,8 @@ pytest-mock = "^3.10"
 mypy = "^1.15.0"
 types-pyyaml = "^6.0.12.20250402"
 pytest-cov = "^6.1.1"
-python-semantic-release = "^8.0.0"
+python-semantic-release = "^10.0.0"
+
 
 [tool.poetry.scripts]
 easycmdline = "easycmdline.cli:run"
