@@ -46,4 +46,7 @@ disable = [
 
 [tool.semantic_release]
 version_variable = "easycmdline/__init__.py:__version__"
-branches = { main = {}, "release/**" = { prerelease = "rc" } }
+branches = [
+  { name = "main" },
+  { name = "release/**", prerelease = "rc" }
+]
