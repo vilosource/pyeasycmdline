@@ -56,6 +56,9 @@ jobs:
       - name: Install dependencies
         run: make dev-install
 
+      - name: Ensure latest python-semantic-release
+        run: poetry add --group dev python-semantic-release@^8.0.0
+
       - name: Run Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
