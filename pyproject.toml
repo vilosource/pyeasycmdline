@@ -47,8 +47,4 @@ disable = [
 
 [tool.semantic_release]
 version_variable = "easycmdline/__init__.py:__version__"
-# Force install latest python-semantic-release in workflow to guarantee correct version
-branches = [
-  { name = "main" },
-  { name = "release/**", prerelease = "rc" }
-]
+branches = { main = true, "release/**" = "rc" }
