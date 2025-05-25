@@ -41,6 +41,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - uses: actions/setup-python@v5
         with:
