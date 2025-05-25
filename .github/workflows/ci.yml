@@ -7,12 +7,10 @@ on:
       - "feature/*"
       - "hotfix/*"
       - develop
-      - release/*
       - main
   pull_request:
     branches:
       - develop
-      - release/*
       - main
 
 permissions:
