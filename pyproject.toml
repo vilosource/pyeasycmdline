@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyeasycmdline"
-version = "0.2.0"
+version = "0.2.1-rc.1"
 description = "A YAML-driven command-line interface framework"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
