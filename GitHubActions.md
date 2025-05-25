@@ -14,6 +14,8 @@ This document details the recommended Git workflow and CI/CD pipeline using GitH
 | `feature/*`  | New feature development               | Auto-merge into `develop` after successful tests |
 | `hotfix/*`   | Critical fixes                        | Auto-merge into `develop` after successful tests |
 
+for release to trigger  there must be a fix:  or bug: or BREAKING_CHANGE 
+
 ## 🔄 Workflow Steps
 
 ### 1. Development Workflow
