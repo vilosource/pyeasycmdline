@@ -63,7 +63,10 @@ jobs:
       - name: Run Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
           poetry run semantic-release publish
 
       - name: Publish to PyPI
