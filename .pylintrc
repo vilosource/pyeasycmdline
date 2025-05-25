@@ -1,0 +1,28 @@
+[MAIN]
+# Ignore files matching these patterns when looking for source code
+ignore-paths=easycmdline/tests
+ignore-patterns=test_.*\.py
+
+[MESSAGES CONTROL]
+# Disable specific errors and warnings
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    protected-access,
+    redefined-outer-name,
+    import-outside-toplevel,
+    unused-argument,
+    broad-exception-caught,
+
+[FORMAT]
+# Maximum line length
+max-line-length=120
+
+[TYPECHECK]
+# These modules will be ignored by pylint
+ignored-modules=pytest
+
+# Generated members are accepted
+generated-members=pytest.*
