@@ -44,6 +44,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
 
+      - name: Ensure tags are fetched
+        run: git fetch --prune --force --tags
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
