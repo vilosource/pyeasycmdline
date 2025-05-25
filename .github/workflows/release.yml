@@ -64,6 +64,7 @@ jobs:
           poetry run semantic-release publish
 
       - name: Publish to PyPI
+        if: github.ref == 'refs/heads/main'
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: |
