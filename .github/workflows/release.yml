@@ -62,7 +62,7 @@ jobs:
         run: make dev-install
 
       - name: Ensure latest python-semantic-release
-        run: poetry add --group dev python-semantic-release@^8.0.0
+        run: poetry add --group dev python-semantic-release@^10.0.0
 
       - name: Run Semantic Release
         env:
