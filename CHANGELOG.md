@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.2.1-rc.3 (2025-05-25)
+
+### Fix
+
+* fix: testing release tagging
+
+
 
 ## v0.2.1-rc.2 (2025-05-25)
 

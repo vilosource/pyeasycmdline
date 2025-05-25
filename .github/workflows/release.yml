@@ -73,6 +73,15 @@ jobs:
           git config --global user.email "action@github.com"
           poetry run semantic-release publish
 
+      - name: Ensure GitHub Release exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          if ! gh release view "$latest_tag" >/dev/null 2>&1; then
+            gh release create "$latest_tag" -t "$latest_tag" -n ""
+          fi
+
       - name: Publish to PyPI
         if: github.ref == 'refs/heads/main'
         env:
